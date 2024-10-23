@@ -1,94 +1,170 @@
-import { useState } from 'react'
-import Navbar from './Navbar'
-import Footer from './Footer'
-import TopBar from './TopBar'
+import { useEffect, useState } from "react";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import TopBar from "./TopBar";
+import { doc, getDoc } from "firebase/firestore"; // Import getDoc correctly
+import { db } from "../firebase"; // Import your Firestore instance
 
 export default function FAQPage() {
-  // State to manage which question is open
-  const [openIndex, setOpenIndex] = useState(null)
+  const [openIndex, setOpenIndex] = useState(null); // To manage the expanded/collapsed state of the FAQs
+  const [FAQ, setFaq] = useState(""); // State for FAQ
+  const [privacy, setPolicy] = useState([]); // State for privacy policies (array)
+  const [terms, setTerms] = useState([]);
+  const [content, setContent] = useState([]); // State for content
+  const [loadingFaq, setLoadingFaq] = useState(true); // State to manage loading
 
-  // Toggle the open index
+  // Fetch FAQ, Privacy Policy, and Terms and Conditions data from Firestore
+  const getFaq = async () => {
+    try {
+      const id = "www.aforapple.in"; // Document ID
+      const docRef = doc(db, "sites", id); // Reference to the Firestore document
+      const snapshot = await getDoc(docRef); // Fetch the document
+      const listData = snapshot.data();
+
+      // Check if 'Policies' exists and fetch FAQ, Privacy Policy, and Terms and Conditions
+      if (listData && listData["Policies"]) {
+        setFaq(listData["Policies"].FAQ || "No FAQ available");
+        const privacyPolicies = listData["Policies"].PrivacyPolicy || [];
+        setPolicy(
+          Array.isArray(privacyPolicies) ? privacyPolicies : [privacyPolicies]
+        );
+
+        const termsCondition = listData["Policies"].TermsCondition || [];
+        setTerms(
+          Array.isArray(termsCondition) ? termsCondition : [termsCondition]
+        );
+
+        const content = listData["School Policies"].Content || [];
+        setContent(Array.isArray(content) ? content : [content]);
+      } else {
+        setFaq("No FAQ available");
+        setPolicy(["No privacy policy available"]);
+        setTerms(["No terms and conditions available"]);
+        setContent(["No content  available"]);
+      }
+    } catch (error) {
+      console.error("Error fetching data from Firebase:", error);
+      setFaq("Failed to load FAQ");
+      setPolicy(["Failed to load privacy policy"]);
+      setTerms(["Failed to load terms and conditions"]);
+      setContent(["Failed to load content"]);
+    } finally {
+      setLoadingFaq(false); // Stop the loading indicator
+    }
+  };
+
+  useEffect(() => {
+    getFaq(); // Fetch FAQ on component mount
+  }, []);
+
+  // Function to toggle the visibility of FAQ answers
   const handleToggle = (index) => {
-    setOpenIndex(openIndex === index ? null : index)
-  }
+    setOpenIndex(openIndex === index ? null : index); // Toggle the clicked question's answer
+  };
 
-  // FAQ data (you can add more questions as needed)
+  // Dynamic FAQ array with privacy, terms, and FAQ data
   const faqs = [
     {
-      question: 'What is your return policy?',
-      answer: 'Our return policy allows returns within 30 days of purchase with a valid receipt. Products must be in original packaging and unused.'
+      question: privacy[0], // Privacy Policy dynamic question
+      answer:
+        "Our return policy allows returns within 30 days of purchase with a valid receipt. Products must be in original packaging and unused.",
     },
     {
-      question: 'Do you offer international shipping?',
-      answer: 'Yes, we offer international shipping to selected countries. Please check our shipping policy for detailed information.'
+      question: "Terms & Condition", // Terms and Conditions dynamic question
+      answer: terms[0],
     },
     {
-      question: 'How can I track my order?',
-      answer: 'Once your order is shipped, you will receive a tracking number via email. You can track your order using the provided link.'
+      question: "School Policies",
+      answer: content[0],
     },
     {
-      question: 'Can I change or cancel my order?',
-      answer: 'Orders can be changed or canceled within 24 hours of placing them. Contact our support team for assistance.'
+      question: "Can I change or cancel my order?",
+      answer:
+        "Orders can be changed or canceled within 24 hours of placing them. Contact our support team for assistance.",
     },
     {
-      question: 'What payment methods do you accept?',
-      answer: 'We accept all major credit cards, PayPal, Apple Pay, and Google Pay. For detailed information, please visit our payment methods page.'
-    }
-  ]
+      question: "What payment methods do you accept?",
+      answer:
+        "We accept all major credit cards, PayPal, Apple Pay, and Google Pay. For detailed information, please visit our payment methods page.",
+    },
+  ];
 
   return (
     <div className="container mx-auto bg-[#f5f2e9]">
       <TopBar />
       {/* Header */}
-      <header className="bg-gradient-to-r from-teal-400 to-blue-500 p-24 text-white text-center relative overflow-hidden">
-        <h1 className="text-4xl font-extrabold tracking-wider">Frequently Asked Questions</h1>
-        <p className="mt-2 text-lg">Find answers to the most common questions below</p>
-        
+      <header className="bg-gradient-to-r from-teal-400 to-blue-500 p-6 sm:p-8 md:p-16 lg:p-24 text-white text-center relative overflow-hidden flex flex-col items-center justify-center">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-wider">
+          Frequently Asked Questions
+        </h1>
+        <p className="mt-2 text-sm sm:text-base md:text-lg">
+          {loadingFaq ? "Loading..." : FAQ || "No FAQ available"}
+        </p>
+
         {/* Decorative elements */}
         <div className="absolute top-8 left-8">
-          <div className="w-16 h-16 bg-pink-500 rounded-full animate-pulse"></div>
+          <div className="w-10 sm:w-12 md:w-16 h-10 sm:h-12 md:h-16 bg-pink-500 rounded-full animate-pulse"></div>
         </div>
         <div className="absolute top-46 right-8">
-          <div className="w-12 h-12 bg-yellow-400 rounded-full animate-bounce"></div>
+          <div className="w-6 sm:w-8 md:w-12 h-6 sm:h-8 md:h-12 bg-yellow-400 rounded-full animate-bounce"></div>
         </div>
       </header>
-      
+
       {/* FAQ Section */}
-      <div className="my-12 px-6">
-        <h2 className="text-3xl font-semibold mb-8 text-gray-800 text-center">Common Questions</h2>
-        <div className="space-y-6 max-w-3xl mx-auto relative">
+      <div className="my-6 md:my-12 px-4 sm:px-6 md:px-8">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-6 sm:mb-8 text-gray-800 text-center">
+          Common Questions
+        </h2>
+        <div className="space-y-4 md:space-y-6 max-w-full sm:max-w-2xl lg:max-w-3xl mx-auto relative">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-white shadow-md rounded-lg p-6 transition-all duration-300"
+              className="bg-white shadow-md rounded-lg p-4 sm:p-5 md:p-6 transition-all duration-300"
             >
               {/* Question */}
               <button
-                className="flex justify-between items-center w-full text-left text-lg font-medium text-gray-800 focus:outline-none"
+                className="flex justify-between items-center w-full text-left text-sm sm:text-base md:text-lg font-medium text-gray-800 focus:outline-none"
                 onClick={() => handleToggle(index)}
               >
                 {faq.question}
-                <span className={`ml-2 transform transition-transform duration-300 ${openIndex === index ? 'rotate-180' : 'rotate-0'}`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                <span
+                  className={`ml-2 transform transition-transform duration-300 ${
+                    openIndex === index ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 sm:h-6 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 15l7-7 7 7"
+                    />
                   </svg>
                 </span>
               </button>
               {/* Answer (Collapsible Section) */}
-              <div className={`mt-4 overflow-hidden transition-max-height duration-500 ease-in-out ${openIndex === index ? 'max-h-screen' : 'max-h-0'}`}>
-                <p className="text-gray-600">
+              <div
+                className={`mt-3 sm:mt-4 overflow-hidden transition-max-height duration-500 ease-in-out ${
+                  openIndex === index ? "max-h-screen" : "max-h-0"
+                }`}
+              >
+                <p className="text-gray-600 text-sm sm:text-base">
                   {faq.answer}
                 </p>
               </div>
             </div>
           ))}
-
-          
         </div>
       </div>
 
       <Navbar />
       <Footer />
     </div>
-  )
+  );
 }
