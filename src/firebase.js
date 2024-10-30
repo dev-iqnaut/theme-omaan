@@ -15,7 +15,7 @@ import { getFirestore } from "firebase/firestore";
 // };
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBzH0v6igVadt8Fy9KXGpmZ5TxN7kMZn04",
+    apiKey: "",
     authDomain: "testing-king-f4bc5.firebaseapp.com",
     projectId: "testing-king-f4bc5",
     storageBucket: "testing-king-f4bc5.appspot.com",
