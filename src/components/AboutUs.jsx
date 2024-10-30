@@ -33,46 +33,65 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 export default function AboutUs() {
-  const [parentsData, setParentsData] = useState(null); // Holds parent data from Firestore
-  const [loadingMessage, setLoadingMessage] = useState(""); // Loading message for display
+  const [parentsData, setParentsContent] = useState(null); // Holds parent content data from Firestore
+  const [loadingMessage, setLoadingMessage] = useState("Loading..."); // Loading message for display
 
   // Fetch parent data from Firestore
-  const getParents = async () => {
+  const getParentsContent = async () => {
     try {
       const id = "www.aforapple.in"; // Document ID
       const docRef = doc(db, "sites", id); // Firestore document reference
       const snapshot = await getDoc(docRef); // Fetch the document
-      const data = snapshot.data(); // Extract document data
 
-      setParentsData(data["ParentsCorner"].parents || []); // Extract parents array
-      setLoadingMessage(
-        data["ParentsCorner"].loading || "No message available"
-      ); // Extract loading message
+      if (snapshot.exists()) {
+        const data = snapshot.data(); // Extract document data
+        console.log(data); // For debugging
+
+        // Access `content` from `parentsCorner` based on the structure
+        setParentsContent(
+          data?.siteData?.parentsCorner?.content || "No content available"
+        );
+      } else {
+        console.error("No document found with the specified ID.");
+        setParentsContent("No content available");
+      }
     } catch (error) {
       console.error("Error fetching parents data from Firebase:", error);
+      setParentsContent("Failed to load content");
+    } finally {
+      setLoadingMessage(""); // Clear loading message
     }
   };
 
   // Fetch parent data when the component mounts
   useEffect(() => {
-    getParents();
+    getParentsContent();
   }, []);
 
-  const [data, setData] = useState(null); // Initialize as null for cleaner conditional rendering
+  const [data, setData] = useState(null); // Holds full document data from Firestore
   const [focus, setFocus] = useState(""); // Focus state for display
+  const [loadingy, setLoadingy] = useState(true); // Loading state
 
+  // Fetch data from Firestore
   const getData = async () => {
     try {
-      const id = "www.aforapple.in";
-      const listRef = doc(db, "sites", id);
-      const snapshot = await getDoc(listRef);
-      const listData = snapshot.data();
-      console.log(listData);
-      setData(listData);
-      setFocus(listData.AboutUs[" focus"] || "No focus available");
-      return listData;
+      const id = "www.aforapple.in"; // Document ID
+      const listRef = doc(db, "sites", id); // Firestore document reference
+      const snapshot = await getDoc(listRef); // Fetch the document
+
+      if (snapshot.exists()) {
+        const listData = snapshot.data();
+        console.log(listData); // For debugging
+
+        setData(listData);
+        setFocus(listData?.siteData?.aboutUs?.focus || "No focus available");
+      } else {
+        console.error("No document found with the specified ID.");
+      }
     } catch (error) {
-      console.log("error at firebase", error);
+      console.log("Error fetching data from Firebase:", error);
+    } finally {
+      setLoadingy(false); // Stop loading
     }
   };
 
@@ -84,17 +103,22 @@ export default function AboutUs() {
   const [mission, setMission] = useState(""); // Mission state for display
   const [loading, setLoading] = useState(true); // State to manage loading
 
+  // Fetch mission data from Firestore
   const getDataa = async () => {
     try {
       const id = "www.aforapple.in"; // Document ID
-      const listRef = doc(db, "sites", id); // Reference to the Firestore document
-      const snapshot = await getDoc(listRef);
-      const listData = snapshot.data();
+      const listRef = doc(db, "sites", id); // Firestore document reference
+      const snapshot = await getDoc(listRef); // Fetch the document
 
-      if (listData && listData.AboutUs) {
-        console.log(listData); // Optional: For debugging
-        setMission(listData.AboutUs.mission || "No mission available");
+      if (snapshot.exists()) {
+        const listData = snapshot.data();
+        console.log(listData); // For debugging
+
+        setMission(
+          listData?.siteData?.aboutUs?.mission || "No mission available"
+        );
       } else {
+        console.error("No document found with the specified ID.");
         setMission("No mission available");
       }
     } catch (error) {
@@ -105,27 +129,29 @@ export default function AboutUs() {
     }
   };
 
+  // Fetch data when component mounts
   useEffect(() => {
     getDataa();
   }, []);
-
-  const [school_history, setHistory] = useState(""); // State for school history display
+  const [schoolHistory, setHistory] = useState(""); // State for school history display
   const [loadingHistory, setLoadingHistory] = useState(true); // State to manage loading
 
+  // Fetch school history data from Firestore
   const getHistory = async () => {
     try {
       const id = "www.aforapple.in"; // Document ID
-      const listRef = doc(db, "sites", id); // Reference to the Firestore document
-      const snapshot = await getDoc(listRef);
-      const listData = snapshot.data();
+      const listRef = doc(db, "sites", id); // Firestore document reference
+      const snapshot = await getDoc(listRef); // Fetch the document
 
-      // Fetching the school_history with trailing space
-      if (listData && listData.AboutUs) {
-        console.log(listData); // Optional: For debugging
+      if (snapshot.exists()) {
+        const listData = snapshot.data();
+        console.log(listData); // For debugging
+
         setHistory(
-          listData.AboutUs["school_history: "] || "No history available"
+          listData?.siteData?.aboutUs?.schoolHistory || "No history available"
         );
       } else {
+        console.error("No document found with the specified ID.");
         setHistory("No history available");
       }
     } catch (error) {
@@ -136,6 +162,7 @@ export default function AboutUs() {
     }
   };
 
+  // Fetch data when component mounts
   useEffect(() => {
     getHistory();
   }, []);
@@ -143,17 +170,20 @@ export default function AboutUs() {
   const [vision, setVision] = useState(""); // State for vision display
   const [loadingVision, setLoadingVision] = useState(true); // State to manage loading
 
+  // Fetch vision data from Firestore
   const getVision = async () => {
     try {
       const id = "www.aforapple.in"; // Document ID
-      const listRef = doc(db, "sites", id); // Reference to the Firestore document
-      const snapshot = await getDoc(listRef);
-      const listData = snapshot.data();
+      const listRef = doc(db, "sites", id); // Firestore document reference
+      const snapshot = await getDoc(listRef); // Fetch the document
 
-      if (listData && listData.AboutUs) {
-        console.log(listData); // Optional: For debugging
-        setVision(listData.AboutUs.vision || "No vision available");
+      if (snapshot.exists()) {
+        const listData = snapshot.data();
+        console.log(listData); // For debugging
+
+        setVision(listData?.siteData?.aboutUs?.vision || "No vision available");
       } else {
+        console.error("No document found with the specified ID.");
         setVision("No vision available");
       }
     } catch (error) {
@@ -164,44 +194,51 @@ export default function AboutUs() {
     }
   };
 
+  // Fetch data when component mounts
   useEffect(() => {
     getVision();
   }, []);
 
-  const [principal_message, setMessage] = useState(""); // State for principal message display
-  const [loadingg, setLoadingg] = useState(true); // State to manage loading
+  const [principalMessage, setPrincipalMessage] = useState(""); // State for principal message display
+  const [principalImage, setPrincipalImage] = useState(""); // State for principal image URL
+  const [loadinge, setLoadinge] = useState(true); // State to manage loading
 
-  const getMessage = async () => {
+  // Fetch principal message and image data from Firestore
+  const getMessageAndImage = async () => {
     try {
       const id = "www.aforapple.in"; // Document ID
       const listRef = doc(db, "sites", id); // Firestore document reference
-      const snapshot = await getDoc(listRef);
-      const listData = snapshot.data();
+      const snapshot = await getDoc(listRef); // Fetch the document
 
-      // Safely access principal_message (note the extra space at the end)
-      if (
-        listData &&
-        listData.AboutUs &&
-        listData.AboutUs["principal_message "]
-      ) {
-        console.log(listData); // Optional: For debugging
-        setMessage(
-          listData.AboutUs["principal_message "].principal_message ||
+      if (snapshot.exists()) {
+        const listData = snapshot.data();
+        console.log(listData); // For debugging
+
+        // Access the principal message and image based on the structure in Firestore
+        setPrincipalMessage(
+          listData?.siteData?.aboutUs?.principalMessage?.principalMessage ||
             "No message available"
         );
+        setPrincipalImage(
+          listData?.siteData?.aboutUs?.principalMessage?.principalImage || ""
+        );
       } else {
-        setMessage("No message available");
+        console.error("No document found with the specified ID.");
+        setPrincipalMessage("No message available");
+        setPrincipalImage("");
       }
     } catch (error) {
       console.log("Error fetching data from Firebase:", error);
-      setMessage("Failed to load message");
+      setPrincipalMessage("Failed to load message");
+      setPrincipalImage("");
     } finally {
-      setLoadingg(false); // Stop loading
+      setLoadinge(false); // Stop loading
     }
   };
 
+  // Fetch data when component mounts
   useEffect(() => {
-    getMessage();
+    getMessageAndImage();
   }, []);
 
   const stats = [
@@ -346,7 +383,7 @@ export default function AboutUs() {
                   Academy Attitude Positive Attitude.
                 </h1>
                 <p className="mt-4 text-black font-bold">
-                  {focus || "Loading..."}
+                  {loadingy ? "Loading..." : focus}
                 </p>
 
                 {/* Features */}
@@ -529,8 +566,7 @@ export default function AboutUs() {
                 <div className="flex-1">
                   <h2 className="text-white text-2xl font-bold">Our Mission</h2>
                   <p className="mt-4 text-black font-bold">
-                    {loading ? "Loading..." : mission || "No mission available"}
-                    {/* Display fetched mission */}
+                    {loading ? "Loading..." : mission}
                   </p>
                 </div>
                 <img
@@ -551,10 +587,7 @@ export default function AboutUs() {
                   <h2 className="text-white text-2xl font-bold">Who We Are</h2>
                   {/* School History Section */}
                   <p className="mt-4 text-black font-bold">
-                    {loadingHistory
-                      ? "Loading..."
-                      : school_history || "No history available"}
-                    {/* Display fetched school history */}
+                    {loadingHistory ? "Loading..." : schoolHistory}
                   </p>
                 </div>
               </div>
@@ -566,10 +599,7 @@ export default function AboutUs() {
                     Our Approach
                   </h2>
                   <p className="mt-4 text-black font-bold">
-                    {loadingVision
-                      ? "Loading..."
-                      : vision || "No vision available"}
-                    {/* Display fetched vision */}
+                    {loadingVision ? "Loading..." : vision}
                   </p>
                 </div>
                 <img
@@ -589,9 +619,7 @@ export default function AboutUs() {
             <h3 className="text-sm font-semibold">A QUALITY SCHOOL</h3>
             <p className="text-3xl font-bold mt-4">Principal Message</p>
             <h1 className="mt-6 text-3xl">
-              {loading
-                ? "Loading..."
-                : principal_message || "No mission available"}
+              {loadinge ? "Loading..." : principalMessage}
             </h1>
             <button className="mt-8 bg-purple-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-purple-700">
               Get Started
@@ -601,11 +629,15 @@ export default function AboutUs() {
           {/* Right Side Image Section */}
           <div className="w-1/2 flex justify-center items-center">
             <div className="relative">
-              <img
-                src={blog2}
-                alt="Children smiling"
-                className="rounded-lg shadow-lg"
-              />
+              {principalImage ? (
+                <img
+                  src={principalImage}
+                  alt="Principal"
+                  className="rounded-lg shadow-lg"
+                />
+              ) : (
+                <p>No image available</p>
+              )}
             </div>
           </div>
         </div>
@@ -804,11 +836,11 @@ export default function AboutUs() {
         {/* Testimonials */}
         <div className="container mx-auto p-4">
           {/* Loading message */}
-          <div className="text-center mb-6">
+          {/* <div className="text-center mb-6">
             <h2 className="text-2xl font-bold">
               Loading Message: {loadingMessage}
             </h2>
-          </div>
+          </div> */}
 
           {/* Testimonials */}
           <section className="mt-32 mb-8">

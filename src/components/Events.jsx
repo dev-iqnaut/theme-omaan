@@ -7,7 +7,7 @@ import event5 from "../assets/event5.jpg";
 import event6 from "../assets/event6.jpg";
 import event7 from "../assets/event7.jpg";
 import event8 from "../assets/event8.jpg";
-import vdo from "../assets/vdo.mp4"; // Video file
+import vdo from "../assets/vdo.mp4";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import TopBar from "./TopBar";
@@ -83,30 +83,30 @@ function LazyImage({ src, alt, className }) {
 
 export default function SchoolEvents() {
   const videoRef = useRef(null);
-  const [message, setMessage] = useState({});
+  const [message, setMessage] = useState([]);
   const [loading, setLoading] = useState(true);
   const [news, setNews] = useState([]);
 
   const events = [
     {
-      title: message[0]?.title,
-      date: message[0]?.date?.toDate().toDateString(),
-      image: message[0]?.url,
+      title: message[0]?.title || "No title",
+      date: message[0]?.date?.toDate().toDateString() || "No date",
+      image: message[0]?.url || event2, // Fallback to a default image
     },
     {
-      title: message[1]?.title,
-      date: message[1]?.date?.toDate().toDateString(),
-      image: message[1]?.url,
+      title: message[1]?.title || "No title",
+      date: message[1]?.date?.toDate().toDateString() || "No date",
+      image: message[1]?.url || event3,
     },
     {
-      title: news[0]?.title,
-      date: news[0]?.date?.toDate().toDateString(),
-      image: news[0]?.url,
+      title: news[0]?.title || "No title",
+      date: news[0]?.date?.toDate().toDateString() || "No date",
+      image: news[0]?.url || event4,
     },
     {
-      title: news[1]?.title,
-      date: news[1]?.date?.toDate().toDateString(),
-      image: news[1]?.url,
+      title: news[1]?.title || "No title",
+      date: news[1]?.date?.toDate().toDateString() || "No date",
+      image: news[1]?.url || event1,
     },
     { title: "Community Service Event", date: "SEP 23", image: event2 },
     { title: "Trunk-or-Treat Party", date: "OCT 28", image: event1 },
@@ -114,28 +114,37 @@ export default function SchoolEvents() {
     { title: "Video Game Tournament", date: "DEC 05", image: event4 },
   ];
 
-  useEffect(() => {
-    const getMessage = async () => {
-      try {
-        const id = "www.aforapple.in"; // Document ID
-        const listRef = doc(db, "sites", id); // Firestore document reference
-        const snapshot = await getDoc(listRef);
-        const listData = snapshot.data();
-        setMessage(
-          listData["News-Events "].announcement || "No message available"
-        );
+  const getMessage = async () => {
+    try {
+      const id = "www.aforapple.in"; // Document ID
+      const listRef = doc(db, "sites", id); // Firestore document reference
+      const snapshot = await getDoc(listRef);
+      const siteData = snapshot.data();
 
-        setNews(listData["News-Events "].news || []);
-      } catch (error) {
-        console.log("Error fetching data from Firebase:", error);
-        setMessage("Failed to load message");
-      } finally {
-        setLoading(false); // Stop loading
+      if (siteData && siteData.newsEvents) {
+        // Check if newsEvents exists
+        setMessage(siteData.newsEvents.announcement || []);
+        setNews(siteData.newsEvents.news || []);
+      } else {
+        console.log("No newsEvents data available");
+        setMessage([]);
+        setNews([]);
       }
-    };
+      console.log(siteData);
+    } catch (error) {
+      console.log("Error fetching data from Firebase:", error);
+      setMessage("Failed to load message");
+      setNews([]); // Clear news on error
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
 
-    getMessage();
+  useEffect(() => {
+    getMessage(); // Call fetch function on component mount
+  }, []);
 
+  useEffect(() => {
     const videoElement = videoRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -145,7 +154,7 @@ export default function SchoolEvents() {
           videoElement.pause();
         }
       },
-      { threshold: 0.5 } // Video starts playing when 50% of it is in the viewport
+      { threshold: 0.5 }
     );
 
     if (videoElement) {
