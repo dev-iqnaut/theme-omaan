@@ -3,7 +3,6 @@ import logo from "../assets/logo.png";
 export default function Footer() {
   return (
     <footer className="bg-[#0b1340] text-white pt-20 mt-auto relative">
-      {/* Enhanced top wavy divider */}
       <div className="absolute top-0 left-0 w-full overflow-hidden">
         <svg
           className="relative block w-full h-[100px]"

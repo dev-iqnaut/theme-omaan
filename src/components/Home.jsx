@@ -92,7 +92,6 @@ export default function SchoolBanner() {
         </div>
       </div>
 
-      {/* Decorative Background Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Dots and abstract shapes */}
         {/* ... (Keep your existing decorations as they are) */}

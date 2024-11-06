@@ -25,7 +25,6 @@ export default function CoursesPage() {
   return (
     <div className="bg-[#f5f2e9] min-h-screen">
       <TopBar />
-      {/* Header */}
       <header className="bg-orange-500 p-24 relative">
         <div className="container mx-auto text-center">
           <h1 className="text-3xl font-bold text-white">Courses</h1>
@@ -53,8 +52,8 @@ export default function CoursesPage() {
               <div className="p-4">
                 <h3 className="font-bold text-lg mb-2">{course.title}</h3>
                 <p className="text-gray-600 mb-4">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                  eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </p>
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-lg">{course.price}</span>

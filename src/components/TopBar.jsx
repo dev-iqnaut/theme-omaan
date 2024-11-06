@@ -1,7 +1,16 @@
-import { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkerAlt, faEnvelope, faPhoneAlt } from '@fortawesome/free-solid-svg-icons';
-import { faInstagram, faFacebook, faYoutube, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMapMarkerAlt,
+  faEnvelope,
+  faPhoneAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faInstagram,
+  faFacebook,
+  faYoutube,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
 
 export default function TopBar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,16 +25,16 @@ export default function TopBar() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   return (
     <div
       className={`py-2 fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${
-        isScrolled ? 'bg-orange-50 shadow-sm' : 'bg-transparent'
+        isScrolled ? "bg-orange-50 shadow-sm" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center text-black px-4 md:px-8">
@@ -33,8 +42,11 @@ export default function TopBar() {
         <div className="flex flex-wrap justify-center md:justify-start space-x-4 md:space-x-6 text-xs sm:text-sm">
           <span className="flex items-center">
             <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2" />
-            <span className="hidden sm:inline">256D Quadra Street Victoria Road, New York, USA</span>
-            <span className="sm:hidden">New York, USA</span> {/* Shorten text for small screens */}
+            <span className="hidden sm:inline">
+              256D Quadra Street Victoria Road, New York, USA
+            </span>
+            <span className="sm:hidden">New York, USA</span>{" "}
+            {/* Shorten text for small screens */}
           </span>
           <span className="flex items-center">
             <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
@@ -42,7 +54,6 @@ export default function TopBar() {
           </span>
         </div>
 
-        {/* Right Section: Phone and Social Media */}
         <div className="flex flex-wrap justify-center md:justify-end items-center space-x-4 text-xs sm:text-sm mt-2 md:mt-0">
           <span className="flex items-center">
             <FontAwesomeIcon icon={faPhoneAlt} className="mr-2" />

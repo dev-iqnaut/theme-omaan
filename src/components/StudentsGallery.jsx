@@ -101,7 +101,6 @@ export default function StudentGallery() {
               className={`${image.span} relative overflow-hidden rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105`}
               style={{ willChange: "transform" }} // Improves performance of hover effect
             >
-              {/* Lazy Loading Images */}
               <img
                 src={image.src}
                 alt={`Student ${index + 1}`}

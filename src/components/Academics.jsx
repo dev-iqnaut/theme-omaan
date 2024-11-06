@@ -158,7 +158,6 @@ const AcademicsPage = () => {
           )}
         </div>
 
-        {/* CBSE Compliance Section */}
         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 border-t-4 border-yellow-500">
           <h2 className="text-2xl font-semibold mb-4 text-indigo-600 flex items-center gap-2">
             <FaCheckCircle className="text-yellow-500" /> CBSE Compliance

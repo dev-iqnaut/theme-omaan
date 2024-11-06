@@ -8,7 +8,7 @@ import {
   faTwitter,
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
-import { db } from "../firebase"; // Ensure to import Firebase config
+import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 
 // Import images

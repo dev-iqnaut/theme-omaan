@@ -175,8 +175,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-
-      {/* Mobile menu, show/hide based on menu state */}
       <div className={`sm:hidden ${isMenuOpen ? "block" : "hidden"}`}>
         <div className="px-2 pt-2 pb-3 space-y-1">
           {navItems.map((item, index) => (
