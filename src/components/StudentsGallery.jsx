@@ -106,7 +106,7 @@ export default function StudentGallery() {
                 src={image.src}
                 alt={`Student ${index + 1}`}
                 className="w-full h-full object-cover"
-                loading="lazy" // Defers image loading
+                loading="lazy"
               />
             </div>
           ))}
