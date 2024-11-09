@@ -372,7 +372,6 @@ export default function AboutUs() {
       <TopBar />
 
       <main className="container mx-auto p-4">
-        {/* Academy Attitude Section */}
         <section className="py-24">
           <div className="max-w-7xl mx-auto px-4">
             {/* Top Section */}

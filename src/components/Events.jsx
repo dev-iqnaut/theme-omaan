@@ -225,7 +225,6 @@ export default function SchoolEvents() {
           ></video>
         </div>
 
-        {/* Testimonials Section */}
         <h2 className="text-2xl md:text-3xl font-bold text-center my-8">
           Our Testimonials
         </h2>

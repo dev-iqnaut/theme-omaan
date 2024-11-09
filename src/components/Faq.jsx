@@ -59,7 +59,6 @@ export default function FAQPage() {
     getFaq();
   }, []);
 
-  // Function to toggle the visibility of FAQ answers
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };

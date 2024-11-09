@@ -72,7 +72,6 @@ export default function ContactPage() {
         </div>
       </header>
 
-      {/* Main Content */}
       <div className="grid md:grid-cols-2 gap-8 mt-12 px-6">
         {/* Contact Form */}
         <div className="bg-white shadow-md rounded-lg p-8">

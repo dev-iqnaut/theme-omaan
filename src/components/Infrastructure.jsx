@@ -193,7 +193,6 @@ const InfrastructurePage = () => {
       <Navbar />
       <Footer />
 
-      {/* Add CSS for the star pattern background */}
       <style jsx>{`
         .star-pattern {
           background-image: radial-gradient(
