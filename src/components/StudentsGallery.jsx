@@ -105,10 +105,7 @@ export default function StudentGallery() {
           Check out our student gallery.
         </p>
         <button onClick={() => addImage("newImageURL")} className="mt-4">
-          Add New Image
-        </button>
-        <button onClick={removeLastImage} className="mt-4 ml-4">
-          Remove Last Image
+          Remove Image
         </button>
         <div className="grid grid-cols-4 gap-4 auto-rows-[100px]">
           {imagesWithSpans.map((image, index) => (
